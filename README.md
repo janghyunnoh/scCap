@@ -57,9 +57,7 @@ For more details about pretrained weights and model usage, refer to the [officia
 
 ### 1.4. Dataset
 
-The following public single-cell RNA-seq datasets were used in our study.
-Download each dataset from the provided links and place the raw source files under `./data/raw` directory.  
-Cleaned .h5ad files will be generated automatically during preprocessing.  
+The following public single-cell RNA-seq datasets were used in our study. Download each dataset from the provided links and place the raw source files under `./data/raw` directory; the corresponding cleaned `.h5ad` files will be generated automatically during preprocessing.
 
 - **COVID dataset**  
   [Impaired local intrinsic immunity to SARS-CoV-2 infection in severe COVID-19](https://singlecell.broadinstitute.org/single_cell/study/SCP1289/impaired-local-intrinsic-immunity-to-sars-cov-2-infection-in-severe-covid-19)
@@ -79,8 +77,7 @@ This optional tutorial reproduces the full workflow — **Preprocessing** → **
 Download the [tutorial dataset](https://drive.google.com/drive/folders/1iOvqZRoR9JT3GLmGMcsBxiKx313M-BGy?usp=drive_link) and place it inside the `./tutorial/data`.  
 > The dataset is a compact version of the COVID dataset, designed to demonstrate the entire scCap pipeline in a simplified setting.
 
-Once the dataset is placed, you can either start from **Preprocessing** and run each stage step by step,  
-or execute the entire pipeline in one go using the provided bash script:
+Once the dataset is placed, you can either start from **Preprocessing** and run each stage step by step, or execute the entire pipeline in one go using the provided bash script:
 
 ```bash
 bash ./tutorial/run_tutorial.sh
@@ -139,9 +136,7 @@ python preprocess.py \
 
 > **Note:**  
 > You can adjust these parameters according to your dataset or experimental goals.  
-> For example, modifying --min_cells or --target_sum can tune preprocessing sensitivity,  
-> while specifying a different pretrained model with --model allows for domain-specific embeddings
-> (e.g., tissue-specific or disease-focused scGPT models).
+> For example, modifying --min_cells or --target_sum can tune preprocessing sensitivity, while specifying a different pretrained model with --model allows for domain-specific embeddings (e.g., tissue-specific or disease-focused scGPT models).
 
 ### 2.4 Output
 
@@ -207,9 +202,8 @@ python clustering.py \
 | `--max-cells` | `int` | `None` | No | Limits the number of cells used in selection for faster evaluation. If not set, all cells are used. |
 
 > **Note:**  
-> Adjust parameters according to dataset size and analysis objectives.
-> For instance, tuning --n-hvg and --threshold changes clustering granularity,
-> while --max-cells offers a trade-off between computational speed and evaluation stability.
+> Adjust parameters according to dataset size and analysis objectives.  
+> For instance, tuning --n-hvg and --threshold changes clustering granularity, while --max-cells offers a trade-off between computational speed and evaluation stability.
 
 ### 3.4 Output
 
@@ -220,8 +214,7 @@ After completion, the script generates:
 
 ## 4. Prediction
 
-The **Prediction** stage trains a hier-mil framework for phenotype prediction using the clusters constructed in the previous stage.  
-This implementation is adapted from the [hier-mil repository](https://github.com/minhchaudo/hier-mil), and we thank **Chau Do** and **Harri Lähdesmäki** for making their code publicly available.
+The **Prediction** stage trains a hier-mil framework for phenotype prediction using the clusters constructed in the previous stage. This implementation is adapted from the [hier-mil repository](https://github.com/minhchaudo/hier-mil), and we thank **Chau Do** and **Harri Lähdesmäki** for making their code publicly available.
 
 
 ### 4.1 Overview
@@ -254,7 +247,7 @@ CUDA_VISIBLE_DEVICES=[gpu_number] python ./hier-mil/run.py \
 ```
 
 > **Note:**  
-> Training configurations can be modified depending on dataset size and computational resources.
+> Training configurations can be modified depending on dataset size and computational resources.  
 > For example, increasing `--n_tune_trials` improves hyperparameter optimization,  
 > while adjusting `--n_folds` or `--n_repeats` balances evaluation stability and runtime.  
 > For full argument details and model architecture explanations, please refer to the [hier-mil repository](https://github.com/minhchaudo/hier-mil).
