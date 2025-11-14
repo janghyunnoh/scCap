@@ -47,7 +47,7 @@ def add_scgpt_embedding(adata, model_dir, batch_size=128):
         model_dir=Path(model_dir),
         gene_col="Gene",
         batch_size=batch_size,
-        device="cuda:0",  # ✅ Always use GPU by default
+        device="cuda:0",  # Always use GPU by default
         return_new_adata=True,
     )
 
