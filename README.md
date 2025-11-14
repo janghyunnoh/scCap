@@ -58,7 +58,7 @@ For more details about pretrained weights and model usage, refer to the [officia
 ### 1.4. Dataset
 
 The following public single-cell RNA-seq datasets were used in our study.
-Download each dataset from the provided links and place the raw files under `./data/raw`  
+Download each dataset from the provided links and place the raw source files under `./data/raw` directory.  
 Cleaned .h5ad files will be generated automatically during preprocessing.  
 
 - **COVID dataset**  
@@ -73,22 +73,20 @@ Cleaned .h5ad files will be generated automatically during preprocessing.
 
 ### 1.5. Tutorial (Optional)
 
-To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run bash script.  
-This optional tutorial reproduces the full workflow — **Preprocessing** → **Clustering** → **Prediction** — using a small dataset.  
+To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run bash script.
+This optional tutorial reproduces the full workflow — **Preprocessing** → **Clustering** → **Prediction** — on a small demo dataset. 
 
 Download the [tutorial dataset](https://drive.google.com/drive/folders/1iOvqZRoR9JT3GLmGMcsBxiKx313M-BGy?usp=drive_link) and place it inside the `./tutorial/data`.  
-> The dataset is a lightweight version of the COVID dataset, designed to demonstrate the entire scCap pipeline in just a few minutes.
+> The dataset is a compact version of the COVID dataset, designed to demonstrate the entire scCap pipeline in a simplified setting.
 
+Once the dataset is placed, you can either start from **Preprocessing** and run each stage step by step,  
+or execute the entire pipeline in one go using the provided bash script:
 
-Once the dataset is placed, simply execute the following command to run the complete scCap tutorial pipeline,  
-which automatically performs Preprocessing, Clustering, and Phenotype Prediction in sequence:
 ```bash
 bash ./tutorial/run_tutorial.sh
 ```
 > **Tip:**  
 > You can edit parameters such as GPU_ID, directory paths, or number of folds inside the run_tutorial.sh file.  
-> The script will automatically execute all three stages of the pipeline.
-
 
 
  
@@ -105,7 +103,7 @@ This stage consists of the following steps:
 3. **Knowledge Augmentation** - Encode each cell using the pretrained scGPT model to obtain biologically informed 512-dimensional embeddings that represent knowledge learned from millions of human cells.
 4. **(Optional) Annotation Integration** - Integrate SingleR-based computational annotations for reference-based comparison.
 
-Together, these steps transform raw single-cell data into biologically meaningful embeddings, providing a robust foundation for **knowledge-augmented clustering** and **annotation-free phenotype prediction**.
+Together, these steps transform raw single-cell data into biologically meaningful embeddings, providing a robust foundation for knowledge-augmented clustering and annotation-free phenotype prediction.
 
 ### 2.2 Generic Usage
 ```bash
@@ -140,8 +138,8 @@ python preprocess.py \
 | `--batch_size` | `int` | `128` | No | Batch size for scGPT embedding inference. |
 
 > **Note:**  
-> You can adjust these parameters according to your dataset or experimental goals.
-> For example, modifying --min_cells or --target_sum can tune preprocessing sensitivity, 
+> You can adjust these parameters according to your dataset or experimental goals.  
+> For example, modifying --min_cells or --target_sum can tune preprocessing sensitivity,  
 > while specifying a different pretrained model with --model allows for domain-specific embeddings
 > (e.g., tissue-specific or disease-focused scGPT models).
 
@@ -160,7 +158,7 @@ This file serves as the input for the next **Clustering** stage, where biologica
 ## 3. Clustering
 
 The **Clustering** stage constructs biologically meaningful clusters through **initialization**, **refinement**, and **selection**.
-This process integrates local transcriptional variation from raw gene expression with biological knowledge encoded in the pretrained scGPT model, enabling **knowledge-augmented clustering**.
+This process integrates local transcriptional variation from raw gene expression with biological knowledge encoded in the pretrained scGPT model, enabling knowledge-augmented clustering.
 Users can flexibly specify the representation space (either raw or scgpt) for initialization and refinement with arguments.
 
 
@@ -223,7 +221,7 @@ After completion, the script generates:
 ## 4. Prediction
 
 The **Prediction** stage trains a hier-mil framework for phenotype prediction using the clusters constructed in the previous stage.  
-This implementation is adapted from the [hier-mil repository](https://github.com/minhchaudo/hier-mil).
+This implementation is adapted from the [hier-mil repository](https://github.com/minhchaudo/hier-mil), and we thank **Chau Do** and **Harri Lähdesmäki** for making their code publicly available.
 
 
 ### 4.1 Overview
