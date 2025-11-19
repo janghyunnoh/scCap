@@ -26,7 +26,8 @@ cd scCap
 
 # Step 2: Pull the prebuilt Docker image from Docker Hub
 # ------------------------------------------------------
-# You can use other tags (e.g., v1.2), but we recommend :latest as the stable default.  
+# You can use other tags (e.g., v1.2), but we recommend :latest as the stable default.
+
 docker pull watercar99/sccap:latest
 
 # Step 3: Run the container with GPU support and sufficient shared memory
