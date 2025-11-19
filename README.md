@@ -10,35 +10,24 @@ The pipeline consists of four main stages:
 
    
 ## 1. Preparation
-You can set up **scCap** using either (1) a Conda-based environment or (2) a prebuilt Docker image.  
+You can set up **scCap** using either (1) a prebuilt Docker image or (2) a Conda-based environment.  
 Both methods provide an identical software environment for running all experiments.  
-**We highly recommend using Docker** for easier setup and reproducibility across systems.  
+**We highly recommend using Docker** for easier setup and reproducibility across systems.   
 
-### 1.1 Conda Setup
+### 1.1 Docker Setup
+
+For a ready-to-use environment, we provide a prebuilt Docker image in the [scCap Docker Hub repository](https://hub.docker.com/repository/docker/watercar99/sccap/general).  
+This image contains a fully configured environment identical to the Conda setup.  
 ```bash
-git clone https://github.com/janghyunnoh/scCap.git  
+# Step 1: Clone the repository
+# ----------------------------
+git clone https://github.com/janghyunnoh/scCap.git
 cd scCap
-conda env create -f environment.yml
-conda activate scCap
-```
 
-### 1.2 Docker Setup
-For a ready-to-use environment, download the prebuilt [scCap Docker image](https://drive.google.com/drive/folders/10wwlLMg0m2H0RiBAizxwqY2hC47tY5dn?usp=drive_link).  
-This image provides a fully configured environment identical to the Conda setup.  
-
-```bash
-# Step 1: Download the prebuilt Docker image
-# ------------------------------------------
-# Download 'sccap_v1.2.tar.gz' from the link above.
-
-
-# Step 2: Load the image into Docker
-# ----------------------------------
-# Import the downloaded image so it can be used to create containers.
-# Make sure the file path matches your local download directory.
-
-docker load -i [path_to_downloaded_image]/sccap_v1.2.tar.gz
-
+# Step 2: Pull the prebuilt Docker image from Docker Hub
+# ------------------------------------------------------
+# You can use other tags (e.g., v1.2), but we recommend :latest as the stable default.  
+docker pull watercar99/sccap:latest
 
 # Step 3: Run the container with GPU support and sufficient shared memory
 # -----------------------------------------------------------------------
@@ -48,7 +37,15 @@ docker load -i [path_to_downloaded_image]/sccap_v1.2.tar.gz
 
 docker run -it --gpus all --shm-size=[shared_memory_size] \
   -v [local_project_directory]:/workspace \
-  sccap:v1.2
+  watercar99/sccap:latest
+```
+
+### 1.2 Conda Setup
+```bash
+git clone https://github.com/janghyunnoh/scCap.git  
+cd scCap
+conda env create -f environment.yml
+conda activate scCap
 ```
 
 ### 1.3 Download Pretrained Models
@@ -72,10 +69,11 @@ The following public single-cell RNA-seq datasets were used in our study. Downlo
 ### 1.5. Tutorial (Optional)
 
 To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run bash script.
-This optional tutorial reproduces the full workflow — **Preprocessing** → **Clustering** → **Prediction** — on a small demo dataset. 
+This optional tutorial reproduces the full workflow **Preprocessing → Clustering → Prediction** on a small demo dataset. 
 
 Download the [tutorial dataset](https://drive.google.com/drive/folders/1iOvqZRoR9JT3GLmGMcsBxiKx313M-BGy?usp=drive_link) and place it inside the `./tutorial/data`.  
-> The dataset is a compact version of the COVID dataset, designed to demonstrate the entire scCap pipeline in a simplified setting.
+> The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only, **and is not the original full dataset used in our experiments.**
+
 
 Once the dataset is placed, you can either start from **Preprocessing** and run each stage step by step, or execute the entire pipeline in one go using the provided bash script:
 
@@ -83,8 +81,7 @@ Once the dataset is placed, you can either start from **Preprocessing** and run 
 bash ./tutorial/run_tutorial.sh
 ```
 > **Tip:**  
-> You can edit parameters such as GPU_ID, directory paths, or number of folds inside the run_tutorial.sh file.  
-
+> You can edit parameters such as `GPU_ID`, directory paths, or the number of folds inside the `run_tutorial.sh` file if needed.  
 
  
 ## 2. Preprocessing
