@@ -65,12 +65,13 @@ echo "[Step 2] Clustering..."
 python clustering.py \
   --input "$PREPROCESSED" \
   --output "$CONSTRUCTED" \
-  --n_pcs 5 \
+  --init-space raw \
+  --refine-space scgpt \
+  --n-hvg 3000 \
+  --ratio 2.0 \
   --resolution 1.0 \
   --threshold 0.5 \
-  --ratios 2.0 2.1 \
-  --init-space raw \
-  --refine-space scgpt
+  --constraint 0.5 \
 
 echo "Clustering completed."
 echo ""
@@ -84,7 +85,7 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python "$HIERMIL_PATH" \
   --task 2 \
   --patient_id_key patient \
   --label_key label \
-  --cell_type_annot_key optimal_cluster \
+  --cell_type_annot_key refined_cluster \
   --attn1 1 \
   --device cuda \
   --n_tune_trials 2 \
