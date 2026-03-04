@@ -2,7 +2,8 @@ from utils import get_data, set_seeds, train, predict
 from sklearn.model_selection import StratifiedKFold
 from model import Model
 import torch
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, average_precision_score, accuracy_score, recall_score, precision_score, f1_score
+from sklearn.preprocessing import label_binarize
 import itertools
 import numpy as np
 import pandas as pd
@@ -14,7 +15,7 @@ from optuna.samplers import TPESampler
 
 def objective_wrapper(df, meta, train_samples, args):
     def objective(trial):
-        n_epochs = trial.suggest_categorical("n_epochs", [100, 500, 1000])
+        n_epochs = trial.suggest_categorical("n_epochs", [100, 300, 500, 1000])
         dropout = trial.suggest_categorical("dropout", [0, 0.3, 0.5, 0.7])
         weight_decay = trial.suggest_categorical("weight_decay", [1e-4, 1e-3, 1e-2, 1e-1])
         n_layers_lin = trial.suggest_categorical("n_layers_lin", [1, 2])
@@ -38,7 +39,9 @@ def objective_wrapper(df, meta, train_samples, args):
             pred = predict(model, X_val, batch_val, meta_val, len(y_val), args).cpu().numpy()
             preds_.extend(pred)
             truths_.extend(y_val)
-        return roc_auc_score(np.stack(truths_), np.stack(preds_), multi_class="ovo")
+        y_true, y_score = _stack_truths_preds(truths_, preds_)
+        y_score, _ = _get_prediction_pairs(y_score, args)
+        return _compute_roc_auc(y_true, y_score, args)
     return objective
 
 def train_and_tune(df, meta, args):
@@ -64,13 +67,49 @@ def predict_and_save(df, meta, args):
     res.to_csv(args.output)
     return res
 
+def _stack_truths_preds(truths_, preds_):
+    y_true = np.stack(truths_).astype(int)
+    y_score = np.stack(preds_)
+    return y_true, y_score
+
+def _get_prediction_pairs(y_score, args):
+    if args.binary:
+        y_score = np.reshape(y_score, (-1,))
+        y_pred = (y_score >= 0.5).astype(int)
+    else:
+        y_pred = np.argmax(y_score, axis=1)
+    return y_score, y_pred
+
+def _compute_roc_auc(y_true, y_score, args):
+    if args.binary:
+        return roc_auc_score(y_true, y_score)
+    return roc_auc_score(y_true, y_score, multi_class="ovo")
+
+def _compute_auprc(y_true, y_score, args):
+    if args.binary:
+        return average_precision_score(y_true, y_score)
+    n_classes = getattr(args, "n_classes", y_score.shape[1])
+    classes = np.arange(n_classes)
+    y_true_bin = label_binarize(y_true, classes=classes)
+    return average_precision_score(y_true_bin, y_score, average="macro")
+
 def repeated_k_fold(df, meta, args):
     samples = df[["patient", "label"]].drop_duplicates()
     aucs = []
+    aprcs = []
+    accuracies = []
+    recalls = []
+    precisions = []
+    f1s = []
     for i in range(args.n_repeats):
         skf = StratifiedKFold(args.n_folds, shuffle=True, random_state=i)
-        preds_ = []
-        truths_ = []
+        fold_aucs = []
+        fold_aprcs = []
+        fold_accuracies = []
+        fold_recalls = []
+        fold_precisions = []
+        fold_f1s = []
+        
         for train_idx, test_idx in skf.split(samples, samples["label"]):
 
             train_samples = samples.iloc[train_idx, :]
@@ -89,14 +128,42 @@ def repeated_k_fold(df, meta, args):
 
             pred = predict(model, X_test, batch_test, meta_test, len(test_samples), args).cpu().numpy()
 
-            truths_.extend(y_test)
-            preds_.extend(pred)
+            y_true = np.array(y_test).astype(int)
+            y_score = np.array(pred)
+            y_score, y_pred = _get_prediction_pairs(y_score, args)
+            fold_aucs.append(_compute_roc_auc(y_true, y_score, args))
+            fold_aprcs.append(_compute_auprc(y_true, y_score, args))
+            fold_accuracies.append(accuracy_score(y_true, y_pred))
+            fold_recalls.append(recall_score(y_true, y_pred, average="macro", zero_division=0))
+            fold_precisions.append(precision_score(y_true, y_pred, average="macro", zero_division=0))
+            fold_f1s.append(f1_score(y_true, y_pred, average="macro", zero_division=0))
 
-        aucs.append(roc_auc_score(np.stack(truths_), np.stack(preds_), multi_class="ovo"))
-    res = pd.DataFrame({"seed": range(args.n_repeats), "auc": aucs})
+        aucs.append(np.mean(fold_aucs))
+        aprcs.append(np.mean(fold_aprcs))
+        accuracies.append(np.mean(fold_accuracies))
+        recalls.append(np.mean(fold_recalls))
+        precisions.append(np.mean(fold_precisions))
+        f1s.append(np.mean(fold_f1s))
+    res = pd.DataFrame({
+        "seed": range(args.n_repeats),
+        "auc": aucs,
+        "auprc": aprcs,
+        "accuracy": accuracies,
+        "recall": recalls,
+        "precision": precisions,
+        "f1": f1s,
+    })
     res.to_csv(args.output)
-    return np.mean(aucs), np.std(aucs)
 
+    def summarize(lst):
+        return np.mean(lst), np.std(lst)
 
-
-
+    metrics = {
+        "auc": summarize(aucs),
+        "auprc": summarize(aprcs),
+        "accuracy": summarize(accuracies),
+        "recall": summarize(recalls),
+        "precision": summarize(precisions),
+        "f1": summarize(f1s),
+    }
+    return metrics
