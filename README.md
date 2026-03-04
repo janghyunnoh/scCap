@@ -5,7 +5,7 @@
 The pipeline consists of four main stages:
 1. **Preparation** – Set up the environment, download pretrained single-cell foundation models, and prepare public datasets.  
 2. **Preprocessing** – Perform standard preprocessing and encode cells using the pretrained single-cell foundation model. 
-3. **Clustering** – Construct biologically meaningful clusters through a three-step process of initialization, refinement, and selection. 
+3. **Clustering** – Construct biologically meaningful clusters through a two-step process of initialization and refinement. 
 4. **Prediction** – Train a hierarchical multiple instance learning (hier-mil) framework with dual-level attention to aggregate information across cell and cluster levels for phenotype prediction.
 
    
@@ -55,7 +55,7 @@ For more details about pretrained weights and model usage, refer to the [officia
 
 ### 1.4. Dataset
 
-The following public single-cell RNA-seq datasets were used in our study. Download each dataset from the provided links and place the raw source files under `./data/raw` directory; the corresponding cleaned `.h5ad` files will be generated automatically during preprocessing.
+The following public single-cell RNA-seq datasets were used in our study. Download each dataset from the provided links and place the raw source files under `./data/raw` directory; the corresponding cleaned `.h5ad` files will be generated automatically during preprocessing stage.
 
 - **COVID dataset**  
   [Impaired local intrinsic immunity to SARS-CoV-2 infection in severe COVID-19](https://singlecell.broadinstitute.org/single_cell/study/SCP1289/impaired-local-intrinsic-immunity-to-sars-cov-2-infection-in-severe-covid-19)
@@ -72,7 +72,7 @@ The following public single-cell RNA-seq datasets were used in our study. Downlo
 To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run bash script.
 This optional tutorial reproduces the full workflow **Preprocessing → Clustering → Prediction** on a small demo dataset. 
 
-Download the [tutorial dataset](https://drive.google.com/drive/folders/1iOvqZRoR9JT3GLmGMcsBxiKx313M-BGy?usp=drive_link) and place it inside the `./tutorial/data`.  
+Download the [tutorial dataset](https://drive.google.com/file/d/1R2vJoIDXRGx83yU-LpY4g5Vrmpdg-rJD/view?usp=drive_link) and place it inside the `./tutorial/data`.  
 > The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only, **and is not the original full dataset used in our experiments.**
 
 
@@ -87,16 +87,16 @@ bash ./tutorial/run_tutorial.sh
  
 ## 2. Preprocessing
 
-The **preprocessing** stage prepares raw single-cell datasets for downstream **Clustering** and **Prediction**.  
-To enable biologically meaningful clustering, this stage converts raw count matrices into structured AnnData (.h5ad) format,
-applies quality control and normalization, and generates scGPT embeddings that capture biological knowledge learned from large-scale single-cell data.
+The **preprocessing** stage prepares raw single-cell datasets for **Clustering** and **Prediction**.  
+This stage converts raw count matrices into structured AnnData (.h5ad) format, applies quality control and normalization, 
+and generates scGPT embeddings that capture biological knowledge learned from large-scale single-cell data.
 
 ### 2.1 Overview
 This stage consists of the following steps:  
 1. **Data Conversion** – Converts dataset-specific raw files (e.g., .mtx, .tsv, .txt) into a structured AnnData (.h5ad) format.
 2. **Quality Control & Normalization** – Filter low-quality cells and normalize gene expression values to ensure consistency across samples.
 3. **Knowledge Augmentation** - Encode each cell using the pretrained scGPT model to obtain biologically informed 512-dimensional embeddings that represent knowledge learned from millions of human cells.
-4. **(Optional) Annotation Integration** - Integrate SingleR-based computational annotations for reference-based comparison.
+4. **(Optional) Annotation Integration** - Integrate SingleR-based computational annotations.
 
 Together, these steps transform raw single-cell data into biologically meaningful embeddings, providing a robust foundation for knowledge-augmented clustering and annotation-free phenotype prediction.
 
@@ -117,7 +117,10 @@ python ./data/raw/[dataset_name]/[dataset_name].py
 
 python preprocess.py \
   --input ./data/[dataset_name]/[dataset_name].h5ad \
-  --output ./data/[dataset_name]/[dataset_name]_preprocessed.h5ad
+  --output ./data/[dataset_name]/[dataset_name]_preprocessed.h5ad \
+  --min_cells [int] \
+  --target_sum [float] \
+  --batch_size [float]
 ```
 
 ### 2.3 Argument Details
@@ -150,7 +153,7 @@ This file serves as the input for the next **Clustering** stage, where biologica
 
 ## 3. Clustering
 
-The **Clustering** stage constructs biologically meaningful clusters through **initialization**, **refinement**, and **selection**.
+The **Clustering** stage constructs biologically meaningful clusters through **initialization**, **refinement**.
 This process integrates local transcriptional variation from raw gene expression with biological knowledge encoded in the pretrained scGPT model, enabling knowledge-augmented clustering.
 Users can flexibly specify the representation space (either raw or scgpt) for initialization and refinement with arguments.
 
@@ -160,14 +163,15 @@ Users can flexibly specify the representation space (either raw or scgpt) for in
 
 This stage performs:  
 1. **Initialization** –  Generates initial clusters using the specified representation space (raw or scgpt).
-2. **Refinement** – Applies a split–merge strategy within the selected representation space to balance local compactness and global biological organization.
-3. **Selection** – Evaluates candidate cluster sets using clustering quality metrics to identify the optimal cluster configuration.
+2. **Refinement** – Applies a split–merge strategy within the selected representation space to balance local compactness and global organization.
+
 
 
 ### 3.2 Generic Usage
 
 ```bash
-# Replace [dataset_name] with one of: covid, cardio, kidney or your data
+# Replace [dataset_name] with a target dataset name (e.g., covid, cardio, kidney, or a custom dataset)  
+# Hyperparameters can be adjusted by the user to suit the experimental setup and dataset characteristics
 
 python clustering.py \
   --input ./data/[dataset_name]/[dataset_name]_preprocessed.h5ad \
@@ -175,12 +179,12 @@ python clustering.py \
   --init-space [raw|scgpt] \
   --refine-space [raw|scgpt] \
   --n-hvg [int] \
-  --ratios [float list] \
-  --threshold [float] \
+  --ratio [float] \
   --resolution [float] \
+  --threshold [float] \
+  --constraint [float] \
   --n_neighbors [int] \
   --n_pcs [int] \
-  --ㅡmax-cells [int]
 ```
 
 ### 3.3 Argument Details
@@ -192,21 +196,21 @@ python clustering.py \
 | `--init-space` | `str` | `"raw"` | No | Representation space used for initial clustering. Choose between `raw` (gene expression) and `scgpt` (embedding space). |
 | `--refine-space` | `str` | `"scgpt"` | No | Representation space for refinement steps. Choose between `raw` (gene expression) and `scgpt` (embedding space).|
 | `--n-hvg` | `int` | `3000` | No | Number of highly variable genes (HVGs) to select. Set to `0` to skip HVG filtering. |
-| `--ratios` | `float list` | `[2.0, 2.1, 2.2, 2.3, 2.4, 2.5]` | No | Merge thresholds controlling how easily clusters are merged. Lower values make merging more aggressive (fewer, larger clusters), while higher values make merging more conservative (more, finer clusters). Multiple values allow evaluation across different merging scales. |
-| `--threshold` | `float` | `0.5` | No | Split threshold determining when clusters should be subdivided, based on the ratio of intra- to inter-group distances. Lower values lead to finer splits, while higher values retain coarser cluster structures. |
+| `--ratio` | `float list` | `2.0` | No | Merge thresholds controlling how easily clusters are merged. Lower values make merging more aggressive (fewer, larger clusters), while higher values make merging more conservative (more, finer clusters). Multiple values allow evaluation across different merging scales. |
 | `--resolution` | `float` | `1.0` | No | Leiden clustering resolution controlling the number of initial clusters. |
+| `--threshold` | `float` | `0.5` | No | Split threshold determining when clusters should be subdivided, based on the ratio of intra- to inter-group distances. Lower values lead to finer splits, while higher values retain coarser cluster structures. |
+| `--constraint` | `float` | `0.5` | No | Maximum allowed size of a merged cluster (as a fraction of total cells). Lower values restrict cluster growth; higher values allow larger merges.|
 | `--n_neighbors` | `int` | `15` | No | Number of neighbors for graph construction during clustering. Larger values yield smoother cluster boundaries. |
 | `--n_pcs` | `int` | `50` | No | Number of principal components used for dimensionality reduction (PCA). |
-| `--max-cells` | `int` | `None` | No | Limits the number of cells used in selection for faster evaluation. If not set, all cells are used. |
 
 > **Note:**  
 > Adjust parameters according to dataset size and analysis objectives.  
-> For instance, tuning --n-hvg and --threshold changes clustering granularity, while --max-cells offers a trade-off between computational speed and evaluation stability.
+> For instance, tuning parameters such as --resolution and --threshold allows users to control the clustering granularity.
 
 ### 3.4 Output
 
 After completion, the script generates:
-- `[dataset_name]_constructed.h5ad` — AnnData file containing the final optimal clusters stored in adata.obs["optimal_cluster"].  
+- `[dataset_name]_constructed.h5ad` — AnnData file containing the final refined clusters stored in adata.obs["refined_cluster"].  
 - Intermediate results (init_cluster, split_*, merged_*) are also retained within the same AnnData object for reference and reproducibility.
 
 
@@ -233,7 +237,7 @@ CUDA_VISIBLE_DEVICES=[gpu_number] python ./hier-mil/run.py \
   --task 2 \
   --patient_id_key patient \
   --label_key label \
-  --cell_type_annot_key optimal_cluster \
+  --cell_type_annot_key refined_cluster \
   --attn1 1 \
   --device cuda \
   --n_tune_trials 30 \
