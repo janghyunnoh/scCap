@@ -1,11 +1,11 @@
 # scCap: Single-cell Knowledge-augmented Clustering for Annotation-free Phenotype Prediction
 
-**scCap** is an annotation-free framework that constructs biologically meaningful clusters through knowledge-augmented clustering and leverages them to enable accurate and interpretable phenotype prediction.
+**scCap** is an annotation-free framework that constructs clusters through knowledge-augmented clustering and leverages them to enable accurate and interpretable phenotype prediction.
 
 The pipeline consists of four main stages:
 1. **Preparation** – Set up the environment, download pretrained single-cell foundation models, and prepare public datasets.  
 2. **Preprocessing** – Perform standard preprocessing and encode cells using the pretrained single-cell foundation model. 
-3. **Clustering** – Construct biologically meaningful clusters through a two-step process of initialization and refinement. 
+3. **Clustering** – Construct knowledge-guided clusters through a two-step process of initialization and refinement. 
 4. **Prediction** – Train a hierarchical multiple instance learning (hier-mil) framework with dual-level attention to aggregate information across cell and cluster levels for phenotype prediction.
 
    
@@ -148,12 +148,12 @@ After completion, the script will generate:
   - 512-dimensional scGPT embeddings stored in `adata.obsm["X_scGPT"]`  
   - (Optional) SingleR annotations added to `adata.obs["singler_annotation"]`
 
-This file serves as the input for the next **Clustering** stage, where biological knowledge are jointly augmented to construct biologically meaningful clusters.
+This file serves as the input for the next **Clustering** stage, where biological knowledge are jointly augmented to construct knowledge-guided clusters.
 
 
 ## 3. Clustering
 
-The **Clustering** stage constructs biologically meaningful clusters through **initialization**, **refinement**.
+The **Clustering** stage constructs knowledge-guided clusters through **initialization**, **refinement**.
 This process integrates local transcriptional variation from raw gene expression with biological knowledge encoded in the pretrained scGPT model, enabling knowledge-augmented clustering.
 Users can flexibly specify the representation space (either raw or scgpt) for initialization and refinement with arguments.
 
