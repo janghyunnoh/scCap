@@ -18,7 +18,10 @@ The following configuration is recommended for running the full scCap pipeline, 
 - GPU: Required (NVIDIA GPU recommended)  
 - GPU Memory: At least 8GB VRAM  
 - RAM: At least 32GB  
-- CPU-only: Not recommended due to the computational cost of scGPT embedding  
+- CPU-only: Not recommended due to the computational cost of scGPT embedding
+
+> **Note:**  
+> For larger datasets (e.g., high cell-count scRNA-seq datasets), additional GPU memory may be required depending on the batch size and dataset scale.
 
 
 You can set up **scCap** using either (1) a prebuilt Docker image or (2) a Conda-based environment.  
