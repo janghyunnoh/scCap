@@ -16,7 +16,7 @@ Both methods provide an identical software environment for running all experimen
 
 ### 1.1 Docker Setup
 
-For a ready-to-use environment, we provide a prebuilt Docker image in the [scCap Docker Hub repository](https://hub.docker.com/repository/docker/watercar99/sccap/general).  
+For a ready-to-use environment, we provide a prebuilt Docker image in the [scCap Docker Hub repository](https://hub.docker.com/repository/docker/mjuailab/sccap/general).  
 This image contains a fully configured environment identical to the Conda setup.  
 ```bash
 # Step 1: Clone the repository
@@ -28,7 +28,7 @@ cd scCap
 # ------------------------------------------------------
 # You can use other tags (e.g., v1.2), but we recommend :latest as the stable default.
 
-docker pull watercar99/sccap:latest
+docker pull mjuailab/sccap:latest
 
 # Step 3: Run the container with GPU support and sufficient shared memory
 # -----------------------------------------------------------------------
@@ -38,7 +38,7 @@ docker pull watercar99/sccap:latest
 
 docker run -it --gpus all --shm-size=[shared_memory_size] \
   -v [local_project_directory]:/workspace \
-  watercar99/sccap:latest
+  mjuailab/sccap:latest
 ```
 
 ### 1.2 Conda Setup
