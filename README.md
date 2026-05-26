@@ -65,11 +65,8 @@ conda activate scCap
 
 ### 1.4 Download Pretrained Models
 
-We use the publicly available pretrained scGPT model, specifically the `whole-human` checkpoint, which was trained on 33 million normal human cells.  
-
-The pretrained weights can be obtained from the official scGPT model zoo provided in the [official scGPT repository](https://github.com/bowang-lab/scGPT)
-, where we use the `whole-human` model as recommended by the authors.  
-
+We use the publicly available pretrained scGPT model, specifically the `whole-human` checkpoint, which was trained on 33 million normal human cells. 
+The pretrained weights can be obtained from the official scGPT model zoo provided in the [official scGPT repository](https://github.com/bowang-lab/scGPT).
 The scGPT codebase and pretrained models are distributed under the MIT license.
 
 
