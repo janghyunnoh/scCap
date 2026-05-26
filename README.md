@@ -13,7 +13,7 @@ The pipeline consists of four main stages:
 
 ### 1.1 Minimum System Requirements
 
-The following configuration is recommended for running the full scCap pipeline, particularly the scGPT embedding stage:
+The following configuration is recommended for running the full scCap pipeline:
 
 - GPU: Required (NVIDIA GPU recommended)  
 - GPU Memory: At least 8GB VRAM  
