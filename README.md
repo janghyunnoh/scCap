@@ -50,8 +50,14 @@ conda activate scCap
 ```
 
 ### 1.3 Download Pretrained Models
-Download the [whole-human pretrained model](https://drive.google.com/drive/folders/1oWh_-ZRdhtoGQ2Fw24HP41FgLoomVo-y) and place it inside the `./scGPT/model_human` directory.  
-For more details about pretrained weights and model usage, refer to the [official scGPT repository](https://github.com/bowang-lab/scGPT).
+
+We use the publicly available pretrained scGPT model, specifically the `whole-human` checkpoint, which was trained on 33 million normal human cells.  
+
+The pretrained weights can be obtained from the official scGPT model zoo provided in the [official scGPT repository](https://github.com/bowang-lab/scGPT)
+, where we use the `whole-human` model as recommended by the authors.  
+
+The scGPT codebase and pretrained models are distributed under the MIT license.
+
 
 ### 1.4. Dataset
 
