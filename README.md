@@ -21,7 +21,7 @@ The following configuration is recommended for running the full scCap pipeline, 
 - CPU-only: Not recommended due to the computational cost of scGPT embedding
 
 > **Note:**  
-> For larger datasets (e.g., high cell-count scRNA-seq datasets), additional GPU memory may be required depending on the batch size and dataset scale.
+> For larger datasets, additional GPU memory and system RAM may be required depending on the dataset scale and batch size.
 
 
 You can set up **scCap** using either (1) a prebuilt Docker image or (2) a Conda-based environment.  
