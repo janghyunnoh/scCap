@@ -11,7 +11,7 @@ The pipeline consists of four main stages:
    
 ## 1. Preparation
 
-### Minimum System Requirements
+### 1.1 Minimum System Requirements
 
 The following configuration is recommended for running the full scCap pipeline, particularly the scGPT embedding stage:
 
@@ -25,7 +25,7 @@ You can set up **scCap** using either (1) a prebuilt Docker image or (2) a Conda
 Both methods provide an identical software environment for running all experiments.  
 **We highly recommend using Docker** for easier setup and reproducibility across systems.   
 
-### 1.1 Docker Setup
+### 1.2 Docker Setup
 
 For a ready-to-use environment, we provide a prebuilt Docker image in the [scCap Docker Hub repository](https://hub.docker.com/repository/docker/mjuailab/sccap/general).  
 This image contains a fully configured environment identical to the Conda setup.  
@@ -52,7 +52,7 @@ docker run -it --gpus all --shm-size=[shared_memory_size] \
   mjuailab/sccap:latest
 ```
 
-### 1.2 Conda Setup
+### 1.3 Conda Setup
 ```bash
 git clone https://github.com/janghyunnoh/scCap.git  
 cd scCap
@@ -60,7 +60,7 @@ conda env create -f environment.yml
 conda activate scCap
 ```
 
-### 1.3 Download Pretrained Models
+### 1.4 Download Pretrained Models
 
 We use the publicly available pretrained scGPT model, specifically the `whole-human` checkpoint, which was trained on 33 million normal human cells.  
 
@@ -70,7 +70,7 @@ The pretrained weights can be obtained from the official scGPT model zoo provide
 The scGPT codebase and pretrained models are distributed under the MIT license.
 
 
-### 1.4. Dataset
+### 1.5 Dataset
 
 The following public single-cell RNA-seq datasets were used in our study. Download each dataset from the provided links and place the raw source files under `./data/raw` directory; the corresponding cleaned `.h5ad` files will be generated automatically during preprocessing stage.
 
@@ -84,7 +84,7 @@ The following public single-cell RNA-seq datasets were used in our study. Downlo
   [Human kidney single-cell atlas (CellxGene)](https://cellxgene.cziscience.com/collections/0f528c8a-a25c-4840-8fa3-d156fa11086f)
 
 
-### 1.5. Tutorial (Optional)
+### 1.6. Tutorial (Optional)
 
 To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run bash script.
 This optional tutorial reproduces the full workflow **Preprocessing → Clustering → Prediction** on a small demo dataset. 
