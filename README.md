@@ -10,6 +10,17 @@ The pipeline consists of four main stages:
 
    
 ## 1. Preparation
+
+### Minimum System Requirements
+
+The following configuration is recommended for running the full scCap pipeline, particularly the scGPT embedding stage:
+
+- GPU: Required (NVIDIA GPU recommended)  
+- GPU Memory: At least 8GB VRAM  
+- RAM: At least 32GB  
+- CPU-only: Not recommended due to the computational cost of scGPT embedding  
+
+
 You can set up **scCap** using either (1) a prebuilt Docker image or (2) a Conda-based environment.  
 Both methods provide an identical software environment for running all experiments.  
 **We highly recommend using Docker** for easier setup and reproducibility across systems.   
