@@ -63,6 +63,10 @@ conda env create -f environment.yml
 conda activate scCap
 ```
 
+> **Note:**  
+> For a lightweight setup, we also provide a minimal requirements.txt containing only the core dependencies.
+
+
 ### 1.4 Download Pretrained Models
 
 We use the publicly available pretrained scGPT model, specifically the `whole-human` checkpoint, which was trained on 33 million normal human cells. 
