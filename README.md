@@ -92,24 +92,18 @@ This optional tutorial reproduces the full workflow **Preprocessing → Clusteri
 
 Download the [tutorial dataset](https://drive.google.com/file/d/1R2vJoIDXRGx83yU-LpY4g5Vrmpdg-rJD/view?usp=drive_link) and place it inside `./tutorial/data`.  
 
-> The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only,  
-
-> **and is not the original full dataset used in our experiments.**
-
----
+> The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only, **and is not the original full dataset used in our experiments.**
 
 ### Option 1. Run locally (bash script)
 
 Once the dataset is placed, you can execute the entire pipeline:
 
 ```bash
-
 bash ./tutorial/run_tutorial.sh
+```
 
 > **Tip:**  
 > You can modify parameters such as GPU_ID, directory paths, or the number of folds in run_tutorial.sh.
-
----
 
 ### Option 2. Run on Google Colab
 
