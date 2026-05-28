@@ -106,7 +106,7 @@ Once the dataset is placed, you can execute the entire pipeline:
 bash ./tutorial/run_tutorial.sh
 ```
 
-> **Tip:**  
+> **Note:**  
 > You can modify parameters such as GPU_ID, directory paths, or the number of folds in run_tutorial.sh.
 
 #### Option 2. Run on Google Colab
