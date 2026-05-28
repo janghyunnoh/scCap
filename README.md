@@ -94,7 +94,7 @@ Download the [tutorial dataset](https://drive.google.com/file/d/1R2vJoIDXRGx83yU
 
 > The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only, **and is not the original full dataset used in our experiments.**
 
-### Option 1. Run locally (bash script)
+#### Option 1. Run locally (bash script)
 
 Once the dataset is placed, you can execute the entire pipeline:
 
@@ -105,9 +105,9 @@ bash ./tutorial/run_tutorial.sh
 > **Tip:**  
 > You can modify parameters such as GPU_ID, directory paths, or the number of folds in run_tutorial.sh.
 
-### Option 2. Run on Google Colab
+#### Option 2. Run on Google Colab
 
-Alternatively, you can run the full pipeline interactively on Google Colab: [scCap Tutorial](https://colab.research.google.com/drive/1Wlfi_z6OP0knLYgEDvhqpiW_zkUV3syA?usp=sharing)  
+Alternatively, you can run the full pipeline interactively on [Google Colab](https://colab.research.google.com/drive/1Wlfi_z6OP0knLYgEDvhqpiW_zkUV3syA?usp=sharing)  
 This option is recommended for quick testing and does not require local installation.
 
  
