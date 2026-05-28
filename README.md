@@ -20,18 +20,20 @@ The following configuration is recommended for running the full scCap pipeline:
 - RAM: At least 32GB  
 - CPU-only: Not recommended due to the computational cost of scGPT embedding
 
-> **Note:**  
-> For larger datasets, additional GPU memory and system RAM may be required depending on the dataset scale and batch size.
+> **Note:** Additional GPU memory and system RAM may be required depending on the dataset scale and batch size.
 
+
+### 1.2 Environment Setup
 
 You can set up **scCap** using either (1) a prebuilt Docker image or (2) a Conda-based environment.  
 Both methods provide an identical software environment for running all experiments.  
 **We highly recommend using Docker** for easier setup and reproducibility across systems.   
 
-### 1.2 Docker Setup
+#### Option 1. Docker Setup
 
 For a ready-to-use environment, we provide a prebuilt Docker image in the [scCap Docker Hub repository](https://hub.docker.com/repository/docker/mjuailab/sccap/general).  
 This image contains a fully configured environment identical to the Conda setup.  
+
 ```bash
 # Step 1: Clone the repository
 # ----------------------------
@@ -55,26 +57,27 @@ docker run -it --gpus all --shm-size=[shared_memory_size] \
   mjuailab/sccap:latest
 ```
 
-### 1.3 Conda Setup
+#### Option 2. Conda Setup
+
 ```bash
 git clone https://github.com/janghyunnoh/scCap.git  
 cd scCap
-conda env create -f environment.yml
+conda env create -f environment.yml # Full research environment (may be heavy for basic usage)
 conda activate scCap
 ```
 
-> **Note:**  
-> For a lightweight setup, we also provide a minimal requirements.txt containing only the core dependencies.
+> **Note:** For a lightweight setup, we also provide a minimal requirements.txt containing only the core dependencies.
 
 
-### 1.4 Download Pretrained Models
+### 1.3 Download Pretrained Models
 
 We use the publicly available pretrained scGPT model, specifically the `whole-human` checkpoint, which was trained on 33 million normal human cells. 
 The pretrained weights can be obtained from the official scGPT model zoo provided in the [official scGPT repository](https://github.com/bowang-lab/scGPT).
+After downloading, place the required model files (`args.json`, `best_model.pt`, `vocab.json`) in the `./scGPT/model_human` directory.
 The scGPT codebase and pretrained models are distributed under the MIT license.
 
 
-### 1.5 Dataset
+### 1.4 Dataset
 
 The following public single-cell RNA-seq datasets were used in our study. Download each dataset from the provided links and place the raw source files under `./data/raw` directory; the corresponding cleaned `.h5ad` files will be generated automatically during preprocessing stage.
 
@@ -88,31 +91,27 @@ The following public single-cell RNA-seq datasets were used in our study. Downlo
   [Human kidney single-cell atlas (CellxGene)](https://cellxgene.cziscience.com/collections/0f528c8a-a25c-4840-8fa3-d156fa11086f)
 
 
-### 1.6. Tutorial (Optional)
+### 1.5 Tutorial (Optional)
 
-To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run script.  
-
-This optional tutorial reproduces the full workflow **Preprocessing → Clustering → Prediction** on a small demo dataset. 
-
-Download the [tutorial dataset](https://drive.google.com/file/d/1R2vJoIDXRGx83yU-LpY4g5Vrmpdg-rJD/view?usp=drive_link) and place it inside `./tutorial/data`.  
-
-> The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only, **and is not the original full dataset used in our experiments.**
+To help users quickly understand the full **scCap** pipeline, we provide both a lightweight tutorial dataset and ready-to-run execution options, including a script and a Google Colab notebook.
+This optional tutorial reproduces the full workflow (**Preprocessing → Clustering → Prediction**) on a small demo dataset, allowing users to easily explore the pipeline without requiring a full environment setup.  
+The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration purposes only, and does not correspond to the full dataset used in our experiments.
 
 #### Option 1. Run locally (bash script)
 
+To run the tutorial locally, you must first download the [tutorial dataset](https://drive.google.com/file/d/1R2vJoIDXRGx83yU-LpY4g5Vrmpdg-rJD/view?usp=drive_link) and place it in the `./tutorial/data`.  
 Once the dataset is placed, you can execute the entire pipeline:
 
 ```bash
 bash ./tutorial/run_tutorial.sh
 ```
 
-> **Note:**  
-> You can modify parameters such as GPU_ID, directory paths, or the number of folds in run_tutorial.sh.
+> **Note:** You can modify parameters such as GPU_ID, directory paths, or the number of folds in run_tutorial.sh.
 
 #### Option 2. Run on Google Colab
 
-Alternatively, you can run the full pipeline interactively on [Google Colab](https://colab.research.google.com/drive/1Wlfi_z6OP0knLYgEDvhqpiW_zkUV3syA?usp=sharing)  
-This option is recommended for quick testing and does not require local installation.
+Alternatively, you can run the full pipeline interactively on [Google Colab](https://colab.research.google.com/drive/1Wlfi_z6OP0knLYgEDvhqpiW_zkUV3syA?usp=sharing).  
+This option is recommended for quick testing and requires no local installation.
 
  
 ## 2. Preprocessing
@@ -165,9 +164,7 @@ python preprocess.py \
 | `--target_sum` | `float` | `1e4` | No | Total expression value to which each cell is normalized. |
 | `--batch_size` | `int` | `128` | No | Batch size for scGPT embedding inference. |
 
-> **Note:**  
-> You can adjust these parameters according to your dataset or experimental goals.  
-> For example, modifying --min_cells or --target_sum can tune preprocessing sensitivity, while specifying a different pretrained model with --model allows for domain-specific embeddings (e.g., tissue-specific or disease-focused scGPT models).
+> **Note:** You can adjust these parameters according to your dataset or experimental goals. For example, modifying --min_cells or --target_sum can tune preprocessing sensitivity, while specifying a different pretrained model with --model allows for domain-specific embeddings (e.g., tissue-specific or disease-focused scGPT models).
 
 ### 2.4 Output
 
@@ -233,9 +230,7 @@ python clustering.py \
 | `--n_neighbors` | `int` | `15` | No | Number of neighbors for graph construction during clustering. Larger values yield smoother cluster boundaries. |
 | `--n_pcs` | `int` | `50` | No | Number of principal components used for dimensionality reduction (PCA). |
 
-> **Note:**  
-> Adjust parameters according to dataset size and analysis objectives.  
-> For instance, tuning parameters such as --resolution and --threshold allows users to control the clustering granularity.
+> **Note:** Adjust parameters according to dataset size and analysis objectives. For instance, tuning parameters such as --resolution and --threshold allows users to control the clustering granularity.
 
 ### 3.4 Output
 
@@ -278,11 +273,7 @@ CUDA_VISIBLE_DEVICES=[gpu_number] python ./hier-mil/run.py \
   --output ./result/[dataset_name]/[dataset_name]_result.txt
 ```
 
-> **Note:**  
-> Training configurations can be modified depending on dataset size and computational resources.  
-> For example, increasing `--n_tune_trials` improves hyperparameter optimization,  
-> while adjusting `--n_folds` or `--n_repeats` balances evaluation stability and runtime.  
-> For full argument details and model architecture explanations, please refer to the [hier-mil repository](https://github.com/minhchaudo/hier-mil).
+> **Note:** Training configurations can be modified depending on dataset size and computational resources. For example, increasing `--n_tune_trials` improves hyperparameter optimization, while adjusting `--n_folds` or `--n_repeats` balances evaluation stability and runtime. For full argument details and model architecture explanations, please refer to the [hier-mil repository](https://github.com/minhchaudo/hier-mil).
 
 
 ### 4.3 Output
