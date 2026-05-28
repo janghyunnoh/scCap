@@ -1,0 +1,30 @@
+# Core ML
+torch
+torch-geometric
+
+# Single-cell analysis
+scanpy
+anndata
+
+# Model
+scgpt
+transformers
+datasets
+
+# Optimization
+optuna
+
+# Scientific computing
+numpy<2.0
+scipy
+pandas
+scikit-learn
+scikit-learn-extra
+statsmodels
+
+# Graph / clustering
+leidenalg
+igraph
+
+# Utilities
+gdown
