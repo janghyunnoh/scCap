@@ -86,20 +86,35 @@ The following public single-cell RNA-seq datasets were used in our study. Downlo
 
 ### 1.6. Tutorial (Optional)
 
-To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run bash script.
+To help users quickly understand the full **scCap** pipeline, we provide a lightweight tutorial dataset and a ready-to-run script.  
+
 This optional tutorial reproduces the full workflow **Preprocessing → Clustering → Prediction** on a small demo dataset. 
 
-Download the [tutorial dataset](https://drive.google.com/file/d/1R2vJoIDXRGx83yU-LpY4g5Vrmpdg-rJD/view?usp=drive_link) and place it inside the `./tutorial/data`.  
-> The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only, **and is not the original full dataset used in our experiments.**
+Download the [tutorial dataset](https://drive.google.com/file/d/1R2vJoIDXRGx83yU-LpY4g5Vrmpdg-rJD/view?usp=drive_link) and place it inside `./tutorial/data`.  
 
+> The tutorial dataset is a small **derived subset** of the COVID dataset, provided for demonstration only,  
 
-Once the dataset is placed, you can either start from **Preprocessing** and run each stage step by step, or execute the entire pipeline in one go using the provided bash script:
+> **and is not the original full dataset used in our experiments.**
+
+---
+
+### Option 1. Run locally (bash script)
+
+Once the dataset is placed, you can execute the entire pipeline:
 
 ```bash
+
 bash ./tutorial/run_tutorial.sh
-```
+
 > **Tip:**  
-> You can edit parameters such as `GPU_ID`, directory paths, or the number of folds inside the `run_tutorial.sh` file if needed.  
+> You can modify parameters such as GPU_ID, directory paths, or the number of folds in run_tutorial.sh.
+
+---
+
+### Option 2. Run on Google Colab
+
+Alternatively, you can run the full pipeline interactively on Google Colab: [scCap Tutorial](https://colab.research.google.com/drive/1Wlfi_z6OP0knLYgEDvhqpiW_zkUV3syA?usp=sharing)  
+This option is recommended for quick testing and does not require local installation.
 
  
 ## 2. Preprocessing
