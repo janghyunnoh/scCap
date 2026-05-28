@@ -31,7 +31,7 @@ Both methods provide an identical software environment for running all experimen
 
 #### Option 1. Docker Setup
 
-For a ready-to-use environment, we provide a prebuilt Docker image in the [scCap Docker Hub repository](https://hub.docker.com/repository/docker/mjuailab/sccap/general).  
+For a ready-to-use environment, we provide a prebuilt Docker image in the [scCap Docker Hub repository](https://hub.docker.com/r/mjuailab/sccap).  
 This image contains a fully configured environment identical to the Conda setup.  
 
 ```bash
