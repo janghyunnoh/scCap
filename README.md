@@ -13,14 +13,14 @@ The pipeline consists of four main stages:
 
 ### 1.1 Minimum System Requirements
 
-The following configuration is recommended for running the full scCap pipeline:
+The following configuration is sufficient for running the tutorial dataset:
 
 - GPU: Required (NVIDIA GPU recommended)  
-- GPU Memory: At least 8GB VRAM  
-- RAM: At least 32GB  
+- GPU Memory: At least 4GB VRAM  
+- RAM: At least 8GB  
 - CPU-only: Not recommended due to the computational cost of scGPT embedding
 
-> **Note:** Additional GPU memory and system RAM may be required depending on the dataset scale and batch size.
+> **Note:** Hardware requirements increase with dataset size. Larger datasets may require substantially more GPU memory and system RAM.
 
 
 ### 1.2 Environment Setup
