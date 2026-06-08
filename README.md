@@ -17,7 +17,7 @@ The scCap pipeline requires GPU acceleration for scGPT embedding generation and 
 
 | Dataset | Cells | Recommended GPU | Recommended RAM |
 |:-------:|:-----:|:---------------:|:---------------:|
-| COVID | 26,947 | <4 GB | <8 GB |
+| COVID | 26,947 | <4 GB | <4 GB |
 | Kidney | 225,177 | <16 GB | <32 GB |
 | Cardio | 592,689 | <24 GB | <48 GB |
 
