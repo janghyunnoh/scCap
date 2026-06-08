@@ -11,16 +11,17 @@ The pipeline consists of four main stages:
    
 ## 1. Preparation
 
-### 1.1 Minimum System Requirements
+### 1.1 Hardware Requirements
 
-The following configuration is sufficient for running the tutorial dataset:
+The scCap pipeline requires GPU acceleration for scGPT embedding generation and efficient execution on large-scale single-cell datasets.
 
-- GPU: Required (NVIDIA GPU recommended)  
-- GPU Memory: At least 4GB VRAM  
-- RAM: At least 8GB  
-- CPU-only: Not recommended due to the computational cost of scGPT embedding
+| Dataset | Cells | Recommended GPU | Recommended RAM |
+|:-------:|:-----:|:---------------:|:---------------:|
+| COVID | 26,947 | <4 GB | <8 GB |
+| Kidney | 225,177 | <16 GB | <32 GB |
+| Cardio | 592,689 | <24 GB | <48 GB |
 
-> **Note:** Hardware requirements increase with dataset size. Larger datasets may require substantially more GPU memory and system RAM.
+> **Note:** Recommendations are based on the peak resource usage observed during our experiments. Larger datasets may require additional GPU memory and system RAM.
 
 
 ### 1.2 Environment Setup
