@@ -296,6 +296,14 @@ For any questions or feedback, please contact:
 If you find **scCap** useful in your research, please cite the following work:
 
 ```bibtex
-@article{
+@article{noh2026annotation,
+  title={Annotation-free phenotype prediction using knowledge-augmented clustering from single-cell RNA sequencing data},
+  author={Noh, Janghyun and Shin, Yoobin and Kim, Min and Oh, Minsik},
+  journal={Briefings in Bioinformatics},
+  volume={27},
+  number={4},
+  pages={bbag395},
+  year={2026},
+  publisher={Oxford University Press}
 }
 ```
